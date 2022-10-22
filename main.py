@@ -97,10 +97,6 @@ if __name__ == "__main__":
         shortComb = []
         shortComb_list = []
         sum = targetSum(round)
-        #sum = 16
-        #sum = 4
-        #num = [1, 1, 2, 2, 3]
-        #num = [11, 9, 6, 1, 4] #9+6+1
         totSum = sum
         num = numbers(sum)
         memo.clear()
@@ -108,5 +104,4 @@ if __name__ == "__main__":
         shortComb_list = filter(shortComb_list)
         score = bonus(score)
         score = gamePlay()
-
         round += 1
