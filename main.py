@@ -27,20 +27,28 @@ def bestSum(sum, num, memo, shortComb_list):
         result = bestSum(remain, num, memo, shortComb_list)
         if result != None:
             comb = [*result, n]
-            if shortComb == None or len(shortComb) > len(comb): shortComb = comb
-            if len(comb) == len(shortComb):
-                sum_of_comb = sum
-                if sum_of_comb == totSum:
-                    if len(shortComb_list) == 0: shortComb_list.append(comb)
-                    if len(comb) <= len(shortComb_list[0]):
-                        if len(comb) < len(shortComb_list[0]): shortComb_list.clear()
-                        shortComb_list.append(comb)
+            if shortComb == None or len(shortComb) > len(comb): shortComb = comb #find shortest comb
+            sum_of_comb = sum
+            if sum_of_comb == totSum: #Find all correct combinations
+                if len(shortComb_list) == 0: shortComb_list.append(comb)
+                if len(comb) <= len(shortComb_list[0]):
+                    if len(comb) < len(shortComb_list[0]): shortComb_list.clear()
+                    shortComb_list.append(comb)
     if shortComb not in shortComb_list: memo[sum] = shortComb
-    if len(shortComb_list) > 1:
-        for comb1 in shortComb_list:
-            for comb2 in shortComb_list:
-                if collections.Counter(comb1) == collections.Counter(comb2): shortComb_list.remove(comb2)
     return shortComb
+
+
+def filter(shortComb_list):
+    new_shortComb_list = []
+    for i in shortComb_list:
+        if i not in new_shortComb_list:
+            if new_shortComb_list != []:
+                for j in new_shortComb_list:
+                    if collections.Counter(i) != collections.Counter(j): new_shortComb_list.append(i)
+                break
+            new_shortComb_list.append(i)
+    shortComb_list = new_shortComb_list
+    return shortComb_list
 
 
 def bonus(score):
@@ -84,15 +92,20 @@ def gamePlay():
 
 if __name__ == "__main__":
     round = 1
-    score = 99
+    score = 0
     while round < 100:
         shortComb = []
         shortComb_list = []
         sum = targetSum(round)
+        #sum = 16
+        #sum = 4
+        #num = [1, 1, 2, 2, 3]
+        #num = [11, 9, 6, 1, 4] #9+6+1
         totSum = sum
         num = numbers(sum)
         memo.clear()
         if shortComb not in shortComb_list: bestSum(sum, num, memo, shortComb_list)
+        shortComb_list = filter(shortComb_list)
         score = bonus(score)
         score = gamePlay()
 
